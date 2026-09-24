@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Homigos Screen Walkthrough</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14201f;
+    --ink-soft: #2b3a37;
+    --paper: #f1f4f2;
+    --surface: #ffffff;
+    --line: #dbe2dd;
+    --muted: #5b6b66;
+    --accent: #1f6f5c;
+    --accent-soft: #dcede7;
+    --accent-strong: #123f34;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #eef2f0; --ink-soft: #c7d2ce; --paper: #0f1715; --surface: #16211e;
+      --line: #2a3733; --muted: #93a29c; --accent: #56c2a6; --accent-soft: #1c3630;
+      --accent-strong: #8fe0c8;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #eef2f0; --ink-soft: #c7d2ce; --paper: #0f1715; --surface: #16211e;
+    --line: #2a3733; --muted: #93a29c; --accent: #56c2a6; --accent-soft: #1c3630;
+    --accent-strong: #8fe0c8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper); color: var(--ink);
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 0 20px; padding-block: 48px;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; }
+  h1, h2, h3 { font-family: "Zilla Slab", Georgia, serif; margin: 0; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+  .cover {
+    border: 1px solid var(--line); background: var(--surface); border-radius: 4px;
+    padding: 36px clamp(20px, 5vw, 48px); position: relative; overflow: hidden;
+  }
+  .cover::before {
+    content: ""; position: absolute; inset: 0 0 auto 0; height: 6px;
+    background: repeating-linear-gradient(90deg, var(--accent) 0 28px, transparent 28px 40px);
+    opacity: .55;
+  }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-strong); font-weight: 600; }
+  .cover h1 { font-size: clamp(28px, 4.5vw, 42px); font-weight: 600; margin-top: 10px; line-height: 1.08; }
+  .cover p.lede { color: var(--muted); font-size: 15.5px; max-width: 68ch; margin-top: 12px; line-height: 1.55; }
+  .cover p.lede code { font-family: "IBM Plex Mono", monospace; background: var(--accent-soft); color: var(--accent-strong); padding: 1px 6px; border-radius: 3px; font-size: 13px; }
+
+  .role-nav { display: flex; gap: 8px; margin-top: 22px; flex-wrap: wrap; }
+  .role-nav a {
+    font-family: "IBM Plex Mono", monospace; font-size: 12.5px; text-decoration: none;
+    color: var(--accent-strong); background: var(--accent-soft); padding: 6px 14px; border-radius: 999px;
+    font-weight: 600;
+  }
+
+  .role-section { margin-top: 48px; scroll-margin-top: 24px; }
+  .role-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
+  .role-head .n { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--accent-strong); background: var(--accent-soft); border-radius: 999px; padding: 2px 10px; font-weight: 600; }
+  .role-head h2 { font-size: 24px; font-weight: 600; }
+  .role-sub { color: var(--muted); font-size: 14px; margin: 0 0 20px; max-width: 70ch; line-height: 1.5; }
+
+  .filmstrip {
+    display: flex; gap: 0; overflow-x: auto; padding-bottom: 12px; align-items: stretch;
+    scroll-snap-type: x proximity;
+  }
+  .frame-wrap { display: flex; align-items: center; flex-shrink: 0; }
+  .connector {
+    flex-shrink: 0; width: 44px; display: flex; align-items: center; justify-content: center;
+    color: var(--accent); opacity: .6; align-self: center; margin-top: -40px;
+  }
+  .frame {
+    width: 300px; flex-shrink: 0; scroll-snap-align: start;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden;
+  }
+  .frame .browser-bar {
+    display: flex; gap: 5px; align-items: center; padding: 8px 10px; border-bottom: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .frame .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
+  .frame a.shot-link { display: block; }
+  .frame img { width: 100%; display: block; border-bottom: 1px solid var(--line); }
+  .frame-caption { padding: 12px 14px 16px; }
+  .frame-caption .step-label {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--accent-strong);
+    text-transform: uppercase; letter-spacing: .06em; font-weight: 600;
+  }
+  .frame-caption .step-title { font-weight: 600; font-size: 14px; margin-top: 4px; }
+  .frame-caption .step-desc { font-size: 12.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+  footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12.5px; line-height: 1.6; }
+  footer b { color: var(--ink); }
+
+  @media (max-width: 640px) {
+    .frame { width: 78vw; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="cover">
+    <div class="eyebrow">End-to-end flow — real screens</div>
+    <h1>Every role's flow, captured live</h1>
+    <p class="lede">
+      Not mockups: every frame below is a screenshot of the current build, using the live
+      homigos.com data (a year of seeded activity). Click any screen to open it full size.
+      Recaptured 24 September 2026, after the audit fixes shipped.
+    </p>
+    <div class="role-nav">
+      <a href="#public">Public site →</a>
+      <a href="#buyer">Buyer flow →</a>
+      <a href="#seller">Seller flow →</a>
+      <a href="#admin">Admin flow →</a>
+    </div>
+  </div>
+
+  <!-- ============ PUBLIC ============ -->
+  <div class="role-section" id="public">
+    <div class="role-head"><span class="n">00</span><h2>Public site</h2></div>
+    <p class="role-sub">What a visitor sees before signing up: the pitch, and a live preview of real inventory.</p>
+
+    <div class="filmstrip">
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/public-01-landing.png" target="_blank"><img src="screenshots/public-01-landing.png" alt="Landing page"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 1 · /</div>
+            <div class="step-title">Landing page</div>
+            <div class="step-desc">How buying and selling works, with live appointments from the marketplace.</div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">→</div>
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/public-02-marketplace.png" target="_blank"><img src="screenshots/public-02-marketplace.png" alt="Public marketplace preview"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 2 · /marketplace</div>
+            <div class="step-title">Marketplace preview</div>
+            <div class="step-desc">Six real listings with date and time. Homeowner details stay hidden until purchase.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ BUYER ============ -->
+  <div class="role-section" id="buyer">
+    <div class="role-head"><span class="n">01</span><h2>Buyer</h2></div>
+    <p class="role-sub">Contractor buying leads to fill their pipeline — sign in, browse, buy, track, and dispute.</p>
+
+    <div class="filmstrip">
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/buyer-01-login.png" target="_blank"><img src="screenshots/buyer-01-login.png" alt="Login screen"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 1 · /login</div>
+            <div class="step-title">Sign in</div>
+            <div class="step-desc">One login for buyers and sellers — real form, real session.</div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">→</div>
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/buyer-02-overview.png" target="_blank"><img src="screenshots/buyer-02-overview.png" alt="Buyer overview dashboard"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 2 · /dashboard/buyer</div>
+            <div class="step-title">Overview</div>
+            <div class="step-desc">Rolling this-week / this-month stats computed from real purchase history.</div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">→</div>
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/buyer-03-browse.png" target="_blank"><img src="screenshots/buyer-03-browse.png" alt="Browse appointments"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 3 · /dashboard/buyer/browse</div>
+            <div class="step-title">Browse appointments</div>
+            <div class="step-desc">Real inventory with appointment date and time, filterable by job type, access, price, and distance from a ZIP.</div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">→</div>
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/buyer-04-listing-detail.png" target="_blank"><img src="screenshots/buyer-04-listing-detail.png" alt="Listing detail page"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 4 · /marketplace/:id</div>
+            <div class="step-title">Listing detail</div>
+            <div class="step-desc">Homeowner contact stays masked until payment clears — the core promise to sellers.</div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">→</div>
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/buyer-05-purchases.png" target="_blank"><img src="screenshots/buyer-05-purchases.png" alt="Purchases page"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 5 · /dashboard/buyer/purchases</div>
+            <div class="step-title">Purchases</div>
+            <div class="step-desc">Full purchase history, sortable — homeowner contact revealed once bought.</div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">→</div>
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/buyer-06-disputes.png" target="_blank"><img src="screenshots/buyer-06-disputes.png" alt="Disputes page"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 6 · /dashboard/buyer/disputes</div>
+            <div class="step-title">Disputes</div>
+            <div class="step-desc">File and track disputes against real purchases, with real outcomes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SELLER ============ -->
+  <div class="role-section" id="seller">
+    <div class="role-head"><span class="n">02</span><h2>Seller</h2></div>
+    <p class="role-sub">Lead generator listing appointments — track sell-through, unsold inventory, earnings, and reputation.</p>
+
+    <div class="filmstrip">
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/seller-01-overview.png" target="_blank"><img src="screenshots/seller-01-overview.png" alt="Seller overview dashboard"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 1 · /dashboard/seller · 30 days</div>
+            <div class="step-title">Overview</div>
+            <div class="step-desc">Listings, sales and money calculated on the server. Money comes from the payment ledger, after the platform fee and refunds.</div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">→</div>
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/seller-02-appointments.png" target="_blank"><img src="screenshots/seller-02-appointments.png" alt="Seller appointments, Unsold tab"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 2 · /dashboard/seller/appointments</div>
+            <div class="step-title">Appointments</div>
+            <div class="step-desc">Every listing by status: drafts, available, pending, sold, disputed and expired.</div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">→</div>
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/seller-03-earnings-balance.png" target="_blank"><img src="screenshots/seller-03-earnings-balance.png" alt="Seller earnings, Balance tab"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 3 · /dashboard/seller/earnings · Balance</div>
+            <div class="step-title">Earnings — Balance</div>
+            <div class="step-desc">Always-current payout position: pending, available, withdrawn, refunded.</div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">→</div>
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/seller-04-earnings-performance.png" target="_blank"><img src="screenshots/seller-04-earnings-performance.png" alt="Seller earnings, Performance tab"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 4 · /dashboard/seller/earnings · Performance</div>
+            <div class="step-title">Earnings — Performance</div>
+            <div class="step-desc">Weekly funded/pending/refunded breakdown across the whole year.</div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">→</div>
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/seller-05-disputes.png" target="_blank"><img src="screenshots/seller-05-disputes.png" alt="Seller disputes, Rating tab"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 5 · /dashboard/seller/disputes · Rating</div>
+            <div class="step-title">Disputes — Rating</div>
+            <div class="step-desc">The average of buyers' star ratings, the same number buyers see on listings. Dispute record shown separately.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ADMIN ============ -->
+  <div class="role-section" id="admin">
+    <div class="role-head"><span class="n">03</span><h2>Admin</h2></div>
+    <p class="role-sub">Running the marketplace end to end — approvals, disputes, and platform-wide reporting.</p>
+
+    <div class="filmstrip">
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/admin-01-approvals.png" target="_blank"><img src="screenshots/admin-01-approvals.png" alt="Admin approval queue"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 1 · /admin/approvals</div>
+            <div class="step-title">Approval queue</div>
+            <div class="step-desc">Sellers waiting on review — real applications at different ages, not one fixture.</div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">→</div>
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/admin-02-approvals-review.png" target="_blank"><img src="screenshots/admin-02-approvals-review.png" alt="Admin approval review dialog"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 2 · Review dialog</div>
+            <div class="step-title">Review</div>
+            <div class="step-desc">Full application plus real uploaded license &amp; insurance documents.</div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">→</div>
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/admin-03-disputes.png" target="_blank"><img src="screenshots/admin-03-disputes.png" alt="Admin disputes queue"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 3 · /admin/disputes</div>
+            <div class="step-title">Disputes</div>
+            <div class="step-desc">Every case across the year — open, refunded, and denied, side by side.</div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">→</div>
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <a class="shot-link" href="screenshots/admin-04-reports.png" target="_blank"><img src="screenshots/admin-04-reports.png" alt="Admin reports, widened date range"></a>
+          <div class="frame-caption">
+            <div class="step-label">Step 4 · /admin/reports</div>
+            <div class="step-title">Reports</div>
+            <div class="step-desc">Platform revenue, top categories by volume, and dispute rate for any date range.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Captured with seeded demo accounts (one buyer, one seller, one admin). Demo sign-in details
+    are shared separately on request rather than printed here. Regenerate with the capture script
+    any time the UI changes. Nothing here is hand-mocked.
+  </footer>
+
+</div>
+</body>
+</html>

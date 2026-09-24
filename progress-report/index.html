@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Homigos Progress Report</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f7f9fc;
+    --surface: #ffffff;
+    --sunk: #eef2f8;
+    --ink: #161d2b;
+    --ink-2: #465063;
+    --muted: #5f6878;
+    --rule: #d9dfe8;
+    --accent: #1f5fd1;
+    --accent-ink: #ffffff;
+    --accent-tint: #e6eefc;
+    --accent-deep: #173f8f;
+    --ok: #1d7a45;
+    --ok-tint: #e2f3e8;
+    --part: #8a5a00;
+    --part-tint: #fbefd6;
+    --wait: #5b4bc4;
+    --wait-tint: #ece9fb;
+    --infra: #a3362e;
+    --infra-tint: #fbe5e2;
+    --shadow: 0 1px 2px rgba(22, 29, 43, .05), 0 4px 16px rgba(22, 29, 43, .05);
+    --font: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --paper: #0e131c; --surface: #151c28; --sunk: #1b2433; --ink: #e8edf5; --ink-2: #b8c1d1;
+      --muted: #97a1b3; --rule: #2a3445; --accent: #7fa8f5; --accent-ink: #0e131c;
+      --accent-tint: #1b2a47; --accent-deep: #b5cdfa; --ok: #6fcf97; --ok-tint: #173324;
+      --part: #e5b25c; --part-tint: #3a2c12; --wait: #a99cf2; --wait-tint: #272147;
+      --infra: #f09a92; --infra-tint: #3d1f1c; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #0e131c; --surface: #151c28; --sunk: #1b2433; --ink: #e8edf5; --ink-2: #b8c1d1;
+    --muted: #97a1b3; --rule: #2a3445; --accent: #7fa8f5; --accent-ink: #0e131c;
+    --accent-tint: #1b2a47; --accent-deep: #b5cdfa; --ok: #6fcf97; --ok-tint: #173324;
+    --part: #e5b25c; --part-tint: #3a2c12; --wait: #a99cf2; --wait-tint: #272147;
+    --infra: #f09a92; --infra-tint: #3d1f1c; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--font); font-size: 15.5px; line-height: 1.6;
+    padding-inline: 20px; padding-block: 40px 72px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 1040px; margin: 0 auto; display: grid; gap: 64px; }
+  h1, h2, h3 { margin: 0; text-wrap: balance; letter-spacing: -0.02em; }
+  h1 { font-size: clamp(32px, 5vw, 48px); font-weight: 800; line-height: 1.05; }
+  h2 { font-size: clamp(24px, 3vw, 30px); font-weight: 700; line-height: 1.15; }
+  h3 { font-size: 17px; font-weight: 600; line-height: 1.3; }
+  p { margin: 0; max-width: 68ch; }
+  .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+  .lede { color: var(--ink-2); font-size: 17px; }
+  .muted { color: var(--muted); }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+  section { display: grid; gap: 24px; scroll-margin-top: 24px; }
+  .section-head { display: grid; gap: 8px; }
+
+  /* ---------- header ---------- */
+  header.top { display: grid; gap: 20px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; }
+  .brand svg { flex: none; }
+  .brand .gos { color: var(--accent); }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; color: var(--muted); font-size: 14px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+  .pill.live { background: var(--ok-tint); color: var(--ok); }
+  .pill.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  nav.toc { display: flex; flex-wrap: wrap; gap: 8px; }
+  nav.toc a { text-decoration: none; font-size: 14px; font-weight: 500; color: var(--ink-2); background: var(--surface); border: 1px solid var(--rule); padding: 6px 14px; border-radius: 999px; }
+  nav.toc a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- status overview ---------- */
+  .tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .tile { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 18px 18px 16px; display: grid; gap: 4px; align-content: start; }
+  .tile .n { font-family: var(--mono); font-size: 34px; font-weight: 600; line-height: 1.1; }
+  .tile .lbl { font-weight: 600; font-size: 14px; }
+  .tile .sub { font-size: 13px; color: var(--muted); }
+  .tile.ok .n { color: var(--ok); } .tile.part .n { color: var(--part); }
+  .tile.wait .n { color: var(--wait); } .tile.infra .n { color: var(--infra); }
+  .bar { display: flex; height: 16px; border-radius: 999px; overflow: hidden; background: var(--sunk); }
+  .bar span { display: block; height: 100%; }
+  .bar .ok { background: var(--ok); } .bar .part { background: var(--part); }
+  .bar .wait { background: var(--wait); } .bar .infra { background: var(--infra); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+  .callout { border-radius: 12px; padding: 18px 20px; display: grid; gap: 6px; border: 1px solid; }
+  .callout.alert { background: var(--infra-tint); border-color: color-mix(in srgb, var(--infra) 35%, transparent); }
+  .callout.alert strong { color: var(--infra); }
+  .callout.info { background: var(--accent-tint); border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
+
+  /* ---------- architecture diagram ---------- */
+  figure { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 20px; display: grid; gap: 14px; }
+  .diagram-scroll { overflow-x: auto; }
+  .diagram-scroll svg { min-width: 760px; width: 100%; height: auto; display: block; }
+  figcaption { font-size: 14px; color: var(--muted); }
+  .svg-box { fill: var(--surface); stroke: var(--rule); }
+  .svg-sunk { fill: var(--sunk); stroke: none; }
+  .svg-ink { fill: var(--ink); } .svg-muted { fill: var(--muted); }
+  .svg-line { stroke: var(--muted); stroke-opacity: .55; fill: none; }
+  .svg-ok { fill: var(--ok); } .svg-okt { fill: var(--ok-tint); }
+  .svg-part { fill: var(--part); } .svg-partt { fill: var(--part-tint); }
+  .svg-infra { fill: var(--infra); } .svg-infrat { fill: var(--infra-tint); }
+  .svg-acc { fill: var(--accent); } .svg-acct { fill: var(--accent-tint); }
+
+  /* ---------- delivered ---------- */
+  .group { display: grid; gap: 14px; }
+  .group-title { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .group-title .count { font-size: 13px; color: var(--muted); }
+  .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 18px 20px; display: grid; gap: 8px; align-content: start; }
+  .card p { font-size: 14.5px; color: var(--ink-2); }
+  .card .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+  .tag { font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 999px; background: var(--sunk); color: var(--ink-2); }
+  .tag.ok { background: var(--ok-tint); color: var(--ok); }
+  .tag.part { background: var(--part-tint); color: var(--part); }
+  .tag.crit { background: var(--infra-tint); color: var(--infra); }
+  .ba { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; font-size: 14px; }
+  .ba dt { font-weight: 600; color: var(--muted); }
+  .ba dd { margin: 0; color: var(--ink-2); }
+
+  .shots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .shot { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); display: grid; }
+  .shot a { display: block; line-height: 0; border-bottom: 1px solid var(--rule); }
+  .shot img { width: 100%; height: auto; display: block; aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; }
+  .shot figcaption { padding: 12px 16px 14px; font-size: 14px; color: var(--ink-2); }
+  .shot figcaption b { color: var(--ink); display: block; font-weight: 600; margin-bottom: 2px; }
+
+  .walk { display: grid; grid-template-columns: 1fr auto; gap: 16px 24px; align-items: center; background: var(--accent); color: var(--accent-ink); border-radius: 16px; padding: 26px 28px; }
+  .walk h3 { font-size: 21px; }
+  .walk p { color: color-mix(in srgb, var(--accent-ink) 85%, transparent); font-size: 15px; }
+  .walk .btn { background: var(--accent-ink); color: var(--accent); text-decoration: none; font-weight: 700; padding: 12px 22px; border-radius: 999px; white-space: nowrap; }
+  .walk .url { font-family: var(--mono); font-size: 12.5px; opacity: .85; word-break: break-all; grid-column: 1 / -1; }
+
+  /* ---------- needs ---------- */
+  .table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14.5px; }
+  th, td { text-align: left; vertical-align: top; padding: 14px 16px; border-bottom: 1px solid var(--rule); }
+  th { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; background: var(--sunk); }
+  tr:last-child td { border-bottom: 0; }
+  td b { font-weight: 600; }
+  td .small { display: block; font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .prio { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+  .prio.now { background: var(--infra-tint); color: var(--infra); }
+  .prio.soon { background: var(--part-tint); color: var(--part); }
+  .prio.later { background: var(--sunk); color: var(--ink-2); }
+
+  .decisions { display: grid; gap: 10px; }
+  details.q { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; }
+  details.q summary { list-style: none; cursor: pointer; padding: 16px 20px; display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: center; }
+  details.q summary::-webkit-details-marker { display: none; }
+  details.q summary .qt { font-weight: 600; }
+  details.q summary .qs { grid-column: 1; font-size: 14px; color: var(--muted); }
+  details.q summary .prio { grid-row: 1; grid-column: 2; }
+  details.q[open] summary { border-bottom: 1px solid var(--rule); }
+  .q-body { padding: 16px 20px 18px; display: grid; gap: 10px; font-size: 14.5px; color: var(--ink-2); }
+  .rec { background: var(--ok-tint); border-radius: 10px; padding: 12px 14px; color: var(--ink); }
+  .rec b { color: var(--ok); }
+  .ids { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+  ol.steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; counter-reset: s; }
+  ol.steps li { counter-increment: s; display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding-bottom: 20px; position: relative; }
+  ol.steps li::before { content: counter(s); width: 32px; height: 32px; border-radius: 50%; background: var(--accent-tint); color: var(--accent-deep); font-weight: 700; display: grid; place-items: center; font-size: 14px; }
+  ol.steps li::after { content: ""; position: absolute; left: 15px; top: 36px; bottom: 4px; width: 2px; background: var(--rule); }
+  ol.steps li:last-child::after { display: none; }
+  ol.steps li div { display: grid; gap: 2px; padding-top: 4px; }
+  ol.steps li span { color: var(--muted); font-size: 14px; }
+
+  footer { border-top: 1px solid var(--rule); padding-top: 20px; font-size: 13.5px; color: var(--muted); display: grid; gap: 6px; }
+
+  @media (max-width: 820px) {
+    .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cards, .shots { grid-template-columns: 1fr; }
+    .walk { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    nav.toc a, .walk .btn { transition: border-color .15s, color .15s, transform .15s; }
+    .walk .btn:hover { transform: translateY(-1px); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ================= HEADER ================= -->
+  <header class="top">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="26" height="23" rx="6" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M10 3v6M22 3v6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="23.5" cy="23.5" r="6" fill="#1f5fd1"/><path d="M20.8 23.6l1.9 1.9 3.5-3.6" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>homi<span class="gos">gos</span></span>
+    </div>
+    <div class="eyebrow">Progress report · 24 September 2026</div>
+    <h1>Where Homigos stands after the marketplace audit</h1>
+    <p class="lede">
+      We received the structured marketplace audit (60 findings) on 23 September. This report
+      shows what we built and shipped since then, what the platform looks like today, and what we
+      need from you to finish the remaining work.
+    </p>
+    <div class="meta-row">
+      <span class="pill live">Live at homigos.com</span>
+      <span>All changes below are deployed to production</span>
+    </div>
+    <nav class="toc" aria-label="Sections">
+      <a href="#status">Status at a glance</a>
+      <a href="#platform">The platform today</a>
+      <a href="#delivered">What we delivered</a>
+      <a href="#screens">See the screens</a>
+      <a href="#needs">What we need from you</a>
+      <a href="#next">Next steps</a>
+    </nav>
+  </header>
+
+  <!-- ================= STATUS ================= -->
+  <section id="status">
+    <div class="section-head">
+      <div class="eyebrow">Status at a glance</div>
+      <h2>28% of the audit is done. Most of the rest is waiting on your decisions.</h2>
+      <p class="muted">Every one of the 60 audit findings has a status. Anything we could build without a business decision from you is built.</p>
+    </div>
+    <div class="tiles">
+      <div class="tile ok"><div class="n">17</div><div class="lbl">Done</div><div class="sub">Built, tested and deployed</div></div>
+      <div class="tile part"><div class="n">9</div><div class="lbl">Partly done</div><div class="sub">Safe part shipped; the rest needs a decision</div></div>
+      <div class="tile wait"><div class="n">30</div><div class="lbl">Need your decision</div><div class="sub">Business or legal rules we can't guess</div></div>
+      <div class="tile infra"><div class="n">4</div><div class="lbl">Need accounts or keys</div><div class="sub">Stripe, email/SMS, file storage</div></div>
+    </div>
+    <div class="bar" role="img" aria-label="60 findings: 17 done, 9 partly done, 30 need a decision, 4 need accounts">
+      <span class="ok" style="width:28.33%"></span><span class="part" style="width:15%"></span><span class="wait" style="width:50%"></span><span class="infra" style="width:6.67%"></span>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--ok)"></i>Done 17</span>
+      <span><i style="background:var(--part)"></i>Partly done 9</span>
+      <span><i style="background:var(--wait)"></i>Your decision 30</span>
+      <span><i style="background:var(--infra)"></i>Accounts / keys 4</span>
+    </div>
+    <div class="callout alert">
+      <strong>Critical issue found and fixed during this work</strong>
+      <p>While checking how homeowner data moves through the system, we found that a logged-in buyer
+      could get a homeowner's name, phone number and address <b>without paying</b>, through an
+      internal address that should never have been reachable from the internet. It is closed in two
+      places (the internal address is blocked, and it no longer returns personal data), and tests now
+      guard it. As a precaution we recommend reviewing the server access logs for this address, which we can do on request.</p>
+    </div>
+  </section>
+
+  <!-- ================= PLATFORM ================= -->
+  <section id="platform">
+    <div class="section-head">
+      <div class="eyebrow">The platform today</div>
+      <h2>Eight services running on one server, one web app, three roles</h2>
+      <p class="muted">Green parts are built and live. Amber parts work but still run on a stand-in (for example, emails are logged instead of sent). Red parts need an account from you before they can go live.</p>
+    </div>
+    <figure>
+      <div class="diagram-scroll">
+        <svg viewBox="0 0 980 470" role="img" aria-label="Architecture: web app and nginx edge in front of eight services; identity, listing, marketplace, payment, dispute, admin, ingestion, notification; with external Stripe, email and SMS, and file storage.">
+          <!-- users -->
+          <g font-family="Geist, sans-serif" font-size="13">
+            <text x="20" y="28" class="svg-muted" font-size="11" font-weight="600" letter-spacing="1.2">WHO USES IT</text>
+            <rect x="20" y="40" width="130" height="40" rx="10" class="svg-acct"/><text x="85" y="65" text-anchor="middle" class="svg-ink" font-weight="600">Buyers</text>
+            <rect x="20" y="92" width="130" height="40" rx="10" class="svg-acct"/><text x="85" y="117" text-anchor="middle" class="svg-ink" font-weight="600">Sellers</text>
+            <rect x="20" y="144" width="130" height="40" rx="10" class="svg-acct"/><text x="85" y="169" text-anchor="middle" class="svg-ink" font-weight="600">Admins</text>
+            <rect x="20" y="196" width="130" height="40" rx="10" class="svg-acct"/><text x="85" y="221" text-anchor="middle" class="svg-ink" font-weight="600">Seller CRMs</text>
+
+            <!-- edge -->
+            <path d="M150 60 H195 M150 112 H195 M150 164 H195 M150 216 H195 M195 60 V216 M195 138 H222" class="svg-line" stroke-width="1.5"/>
+            <rect x="222" y="40" width="150" height="196" rx="12" class="svg-box" stroke-width="1.2"/>
+            <text x="297" y="70" text-anchor="middle" class="svg-ink" font-weight="700">homigos.com</text>
+            <text x="297" y="92" text-anchor="middle" class="svg-muted" font-size="12">React web app</text>
+            <line x1="240" y1="108" x2="354" y2="108" class="svg-line"/>
+            <text x="297" y="132" text-anchor="middle" class="svg-ink" font-weight="600" font-size="12.5">Edge (nginx)</text>
+            <text x="297" y="152" text-anchor="middle" class="svg-muted" font-size="11.5">HTTPS · rate limits</text>
+            <text x="297" y="170" text-anchor="middle" class="svg-muted" font-size="11.5">internal routes blocked</text>
+            <rect x="248" y="190" width="98" height="26" rx="13" class="svg-okt"/><text x="297" y="207" text-anchor="middle" class="svg-ok" font-size="11.5" font-weight="700">LIVE</text>
+
+            <path d="M372 138 H410" class="svg-line" stroke-width="1.5"/>
+
+            <!-- services grid -->
+            <text x="410" y="28" class="svg-muted" font-size="11" font-weight="600" letter-spacing="1.2">SERVICES (ALL LIVE, ALL TESTED)</text>
+            <g>
+              <rect x="410" y="40" width="170" height="58" rx="10" class="svg-box"/><text x="424" y="64" class="svg-ink" font-weight="600">Identity</text><text x="424" y="84" class="svg-muted" font-size="11.5">accounts · roles · approval</text>
+              <rect x="592" y="40" width="170" height="58" rx="10" class="svg-box"/><text x="606" y="64" class="svg-ink" font-weight="600">Listing</text><text x="606" y="84" class="svg-muted" font-size="11.5">appointments · reservation</text>
+              <rect x="410" y="110" width="170" height="58" rx="10" class="svg-box"/><text x="424" y="134" class="svg-ink" font-weight="600">Marketplace</text><text x="424" y="154" class="svg-muted" font-size="11.5">browse · buy · reveal</text>
+              <rect x="592" y="110" width="170" height="58" rx="10" class="svg-box"/><text x="606" y="134" class="svg-ink" font-weight="600">Payment</text><text x="606" y="154" class="svg-muted" font-size="11.5">Stripe Connect · ledger · 18%</text>
+              <rect x="410" y="180" width="170" height="58" rx="10" class="svg-box"/><text x="424" y="204" class="svg-ink" font-weight="600">Dispute</text><text x="424" y="224" class="svg-muted" font-size="11.5">claims · evidence · outcome</text>
+              <rect x="592" y="180" width="170" height="58" rx="10" class="svg-box"/><text x="606" y="204" class="svg-ink" font-weight="600">Admin</text><text x="606" y="224" class="svg-muted" font-size="11.5">approvals · reports · policy</text>
+              <rect x="410" y="250" width="170" height="58" rx="10" class="svg-box"/><text x="424" y="274" class="svg-ink" font-weight="600">Ingestion</text><text x="424" y="294" class="svg-muted" font-size="11.5">CRM webhooks · CSV · Sheets</text>
+              <rect x="592" y="250" width="170" height="58" rx="10" class="svg-box"/><text x="606" y="274" class="svg-ink" font-weight="600">Notification</text><text x="606" y="294" class="svg-muted" font-size="11.5">email · SMS templates</text>
+            </g>
+
+            <!-- external -->
+            <path d="M762 139 H800 M762 279 H800 M800 139 V390 M680 308 V390 H800" class="svg-line" stroke-width="1.5" stroke-dasharray="4 4"/>
+            <text x="810" y="28" class="svg-muted" font-size="11" font-weight="600" letter-spacing="1.2">OUTSIDE SERVICES</text>
+            <rect x="810" y="112" width="160" height="56" rx="10" class="svg-partt"/><text x="824" y="136" class="svg-ink" font-weight="600">Stripe</text><text x="824" y="156" class="svg-part" font-size="11.5" font-weight="600">wired · needs test account</text>
+            <rect x="810" y="252" width="160" height="56" rx="10" class="svg-infrat"/><text x="824" y="276" class="svg-ink" font-weight="600">Email and SMS</text><text x="824" y="296" class="svg-infra" font-size="11.5" font-weight="600">stand-in · needs provider</text>
+            <rect x="810" y="362" width="160" height="56" rx="10" class="svg-infrat"/><text x="824" y="386" class="svg-ink" font-weight="600">File storage (S3)</text><text x="824" y="406" class="svg-infra" font-size="11.5" font-weight="600">local disk · needs AWS</text>
+
+            <!-- event bus + db -->
+            <rect x="410" y="330" width="352" height="40" rx="10" class="svg-sunk"/><text x="586" y="355" text-anchor="middle" class="svg-ink" font-size="12.5" font-weight="600">Event bus (RabbitMQ) · now includes payment events</text>
+            <rect x="410" y="382" width="352" height="40" rx="10" class="svg-sunk"/><text x="586" y="407" text-anchor="middle" class="svg-ink" font-size="12.5" font-weight="600">MongoDB · homeowner data encrypted per field</text>
+
+            <text x="20" y="455" class="svg-muted" font-size="12">One AWS EC2 server, Docker Compose, redeploys automatically on every merge. HTTPS by Let's Encrypt.</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>What is live and what is still a stand-in. The eight services are separate programs that talk through an event bus, so each part can be changed or scaled on its own.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ================= DELIVERED ================= -->
+  <section id="delivered">
+    <div class="section-head">
+      <div class="eyebrow">What we delivered</div>
+      <h2>What changed since the audit, in four groups</h2>
+      <p class="muted">Each item says what was wrong before and what happens now. Every change has automated tests and is deployed.</p>
+    </div>
+
+    <div class="group">
+      <div class="group-title"><h3>Security and homeowner privacy</h3><span class="count">6 items</span></div>
+      <div class="cards">
+        <div class="card">
+          <h3>Homeowner details can't be taken without paying</h3>
+          <dl class="ba"><dt>Before</dt><dd>An internal address returned name, phone and address to any buyer.</dd><dt>Now</dt><dd>Blocked at the edge and removed from the response. Tests check that other buyers, sellers and visitors are refused.</dd></dl>
+          <div class="tags"><span class="tag crit">Critical</span><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>Purchased contact details are encrypted</h3>
+          <dl class="ba"><dt>Before</dt><dd>After purchase, homeowner details were saved in plain text.</dd><dt>Now</dt><dd>Encrypted in the database, and old records were converted automatically on deploy.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>No personal data in system logs</h3>
+          <dl class="ba"><dt>Before</dt><dd>Logs recorded full email and SMS text, and phone verification codes.</dd><dt>Now</dt><dd>Logs keep only who and when. Phone numbers show as <span class="mono">***67</span>.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>Suspended accounts are actually blocked</h3>
+          <dl class="ba"><dt>Before</dt><dd>Suspending an account was recorded, but that account could still buy or list.</dd><dt>Now</dt><dd>A suspended buyer can't check out, and a suspended seller can't create or change listings.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>Limits against abuse</h3>
+          <dl class="ba"><dt>Before</dt><dd>Nothing stopped repeated login attempts or floods of CRM imports.</dd><dt>Now</dt><dd>Too many login attempts or CRM imports from one source are refused for a short time.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span><span class="tag">Limits tunable</span></div>
+        </div>
+        <div class="card">
+          <h3>Verification needs the document</h3>
+          <dl class="ba"><dt>Before</dt><dd>Account setup could say "verified by document" with no document uploaded.</dd><dt>Now</dt><dd>That step only completes once the document is on file.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title"><h3>Money and trust</h3><span class="count">5 items</span></div>
+      <div class="cards">
+        <div class="card">
+          <h3>Seller dashboard figures come from the ledger</h3>
+          <dl class="ba"><dt>Before</dt><dd>The browser added up listing prices, which isn't the same as money earned.</dd><dt>Now</dt><dd>Sales, refunds and net earnings (after the 18% fee) come from the payment ledger.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>One seller rating everywhere</h3>
+          <dl class="ba"><dt>Before</dt><dd>Sellers saw a rating calculated differently from the one buyers see.</dd><dt>Now</dt><dd>Both see the same average of buyers' star ratings. The dispute record is shown separately.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>No double withdrawals or duplicate listings</h3>
+          <dl class="ba"><dt>Before</dt><dd>If the connection dropped while submitting, trying again could pay out twice or list twice.</dd><dt>Now</dt><dd>A retry returns the original result. The screen says "not confirmed" and refreshes instead of showing a false error.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>Payment events reach the rest of the system</h3>
+          <dl class="ba"><dt>Before</dt><dd>Chargebacks from a buyer's bank never reached the disputes system.</dd><dt>Now</dt><dd>Payments and bank chargebacks are announced to every service. A chargeback opens a dispute automatically.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>Reserve policy shows what it really does</h3>
+          <dl class="ba"><dt>Before</dt><dd>The screen said payouts used the reserve policy. They don't yet.</dd><dt>Now</dt><dd>The screen says so honestly, and support staff can view but not edit. Applying it needs your reserve rules.</dd></dl>
+          <div class="tags"><span class="tag part">Partly done</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title"><h3>Buyers and the marketplace</h3><span class="count">4 items</span></div>
+      <div class="cards">
+        <div class="card">
+          <h3>Real appointment date and time</h3>
+          <dl class="ba"><dt>Before</dt><dd>Times were guessed in the browser from "N hours left", and some showed "0h".</dd><dt>Now</dt><dd>Every screen shows the exact appointment date and time, with the time zone.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>Distance search works</h3>
+          <dl class="ba"><dt>Before</dt><dd>The distance slider did nothing; only the exact ZIP matched.</dd><dt>Now</dt><dd>Search by ZIP plus a radius in miles, using US ZIP locations.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>Spend caps enforced at checkout</h3>
+          <dl class="ba"><dt>Before</dt><dd>Weekly caps were only a warning.</dd><dt>Now</dt><dd>Per-appointment, daily and weekly caps are checked by the server before a listing is reserved.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>Buyer overview is complete</h3>
+          <dl class="ba"><dt>Before</dt><dd>No open-disputes count and no recent purchases.</dd><dt>Now</dt><dd>Both are on the overview, next to spend and service areas.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title"><h3>Operations and quality</h3><span class="count">4 items</span></div>
+      <div class="cards">
+        <div class="card">
+          <h3>Top categories by volume</h3>
+          <dl class="ba"><dt>Before</dt><dd>The report from the design didn't exist.</dd><dt>Now</dt><dd>Admin → Reports shows listed and sold counts per category for any date range.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>Accessibility checked on 30 screens</h3>
+          <dl class="ba"><dt>Before</dt><dd>13 screens had serious accessibility problems (missing labels, low contrast).</dd><dt>Now</dt><dd>0 problems in automated checks against WCAG 2.2 AA. A manual screen-reader pass is still to do.</dd></dl>
+          <div class="tags"><span class="tag ok">Baseline done</span></div>
+        </div>
+        <div class="card">
+          <h3>Design compared screen by screen</h3>
+          <dl class="ba"><dt>Before</dt><dd>No record of where the app differs from the approved prototype.</dd><dt>Now</dt><dd>All 23 prototype screens compared with the app, with screenshots. Each difference is waiting for your approval.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span><span class="tag">Needs your sign-off</span></div>
+        </div>
+        <div class="card">
+          <h3>Screen fixes found while re-checking the flow</h3>
+          <dl class="ba"><dt>Before</dt><dd>The seller chart opened on empty days, "Hvac" looked wrong, and labels ran together.</dd><dt>Now</dt><dd>The chart opens on the latest days, names read "HVAC Install", and the layout is fixed.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shots">
+      <figure class="shot">
+        <a href="../e2e-flow/screenshots/seller-01-overview.png" target="_blank" rel="noopener"><img src="../e2e-flow/screenshots/seller-01-overview.png" alt="Seller overview with server-calculated sales, refunds and net earnings" loading="lazy"></a>
+        <figcaption><b>Seller overview</b>Net earned comes from the payment ledger, after the platform fee and refunds.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="../e2e-flow/screenshots/seller-05-disputes.png" target="_blank" rel="noopener"><img src="../e2e-flow/screenshots/seller-05-disputes.png" alt="Seller rating card showing 2.9 from 8 buyer ratings" loading="lazy"></a>
+        <figcaption><b>Seller rating</b>The same number buyers see: 2.9 from 8 buyer ratings. Disputes are counted separately.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="../e2e-flow/screenshots/admin-04-reports.png" target="_blank" rel="noopener"><img src="../e2e-flow/screenshots/admin-04-reports.png" alt="Admin reports with top categories by volume" loading="lazy"></a>
+        <figcaption><b>Admin reports</b>New "Top categories by volume" table under revenue.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="../e2e-flow/screenshots/public-02-marketplace.png" target="_blank" rel="noopener"><img src="../e2e-flow/screenshots/public-02-marketplace.png" alt="Public marketplace with appointment dates and times" loading="lazy"></a>
+        <figcaption><b>Public marketplace</b>Exact appointment date and time, readable job names, homeowner details hidden.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ================= SCREENS ================= -->
+  <section id="screens">
+    <div class="walk">
+      <div>
+        <h3>See every screen, role by role</h3>
+        <p>17 real screenshots of the live platform, recaptured today: the public site, then the buyer, seller and admin flows, from sign-in to disputes and reports.</p>
+      </div>
+      <a class="btn" href="https://semionrutshtein.github.io/homigos-reports/e2e-flow/" target="_blank" rel="noopener">Open the screen walkthrough</a>
+      <div class="url">https://semionrutshtein.github.io/homigos-reports/e2e-flow/</div>
+    </div>
+  </section>
+
+  <!-- ================= NEEDS ================= -->
+  <section id="needs">
+    <div class="section-head">
+      <div class="eyebrow">What we need from you</div>
+      <h2>To finish, we need three things: accounts, decisions and sign-off</h2>
+      <p class="muted">For each decision we suggest a default. If it works for you, a simple "approved" is enough and we can start building.</p>
+    </div>
+
+    <div class="group">
+      <div class="group-title"><h3>A. Accounts and keys</h3><span class="count">4 items · unblocks real payments, emails and file storage</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:24%">What</th><th>What exactly we need</th><th style="width:26%">What it unlocks</th><th style="width:10%">Priority</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>Stripe account (test mode)</b></td>
+              <td>Access to the Homigos Stripe account, or test-mode API keys (publishable + secret) and a webhook signing secret. Connect enabled for Express accounts. We register the webhook for payments, payouts, transfers and <span class="mono">charge.dispute.created</span>.<span class="small">Share keys through a password manager, not email.</span></td>
+              <td>End-to-end tests with real card and ACH payments, refunds, chargebacks and seller payouts before going live.</td>
+              <td><span class="prio now">First</span></td>
+            </tr>
+            <tr>
+              <td><b>Email sending</b></td>
+              <td>Your choice of SendGrid or Amazon SES. An API key, plus DNS access (or your IT contact) to verify <span class="mono">homigos.com</span> as the sender (SPF, DKIM, DMARC).</td>
+              <td>Welcome, purchase confirmation, lead delivery, dispute and payout emails actually get sent.</td>
+              <td><span class="prio now">First</span></td>
+            </tr>
+            <tr>
+              <td><b>SMS sending</b></td>
+              <td>A Twilio account (SID, auth token, sending number) with US A2P 10DLC registration for Homigos.</td>
+              <td>Homeowner phone verification codes and optional SMS alerts.</td>
+              <td><span class="prio soon">Soon</span></td>
+            </tr>
+            <tr>
+              <td><b>Secure file storage</b></td>
+              <td>Permission in the AWS account to create an encrypted S3 bucket and a KMS key (we set them up), or an existing bucket and key.</td>
+              <td>License, insurance and W-9 documents plus call recordings move off the server disk. Also a managed key for homeowner-data encryption.</td>
+              <td><span class="prio soon">Before launch</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title"><h3>B. Business decisions</h3><span class="count">30 audit findings, grouped into 14 questions</span></div>
+      <div class="decisions">
+
+        <details class="q" open>
+          <summary><span class="qt">1. How long can a buyer open a dispute?</span><span class="prio now">First</span><span class="qs">The prototype says 48 hours after purchase. The app uses "until 1 hour after the appointment".</span></summary>
+          <div class="q-body">
+            <p>This affects dispute screens, emails and when sellers get paid.</p>
+            <div class="rec"><b>We suggest:</b> keep "until 1 hour after the appointment time" (current behaviour), using the appointment's local time.</div>
+            <div class="ids">F-POL-01 · D-POL-01</div>
+          </div>
+        </details>
+
+        <details class="q" open>
+          <summary><span class="qt">2. When does an unsold appointment stop being for sale?</span><span class="prio now">First</span><span class="qs">Today an unsold appointment stays for sale for 48 hours after its start time.</span></summary>
+          <div class="q-body">
+            <p>Buyers can currently buy an appointment whose time has already passed.</p>
+            <div class="rec"><b>We suggest:</b> stop selling at the appointment start time. The seller can relist it with a new time.</div>
+            <div class="ids">F-RISK-02 · D-RISK-02</div>
+          </div>
+        </details>
+
+        <details class="q" open>
+          <summary><span class="qt">3. What does a buyer get when they win a dispute?</span><span class="prio now">First</span><span class="qs">Marketplace credit, a cash refund, or both? And who can approve each?</span></summary>
+          <div class="q-body">
+            <div class="rec"><b>We suggest:</b> marketplace credit by default (current behaviour). A cash refund to the card only when a super admin approves it with a written reason.</div>
+            <div class="ids">F-ADM-05 · D-ADM-03</div>
+          </div>
+        </details>
+
+        <details class="q" open>
+          <summary><span class="qt">4. What can support staff do compared with super admins?</span><span class="prio now">First</span><span class="qs">Today both admin roles can do almost everything.</span></summary>
+          <div class="q-body">
+            <div class="rec"><b>We suggest:</b> Support can view everything, handle disputes and flag listings. Only super admins approve or reject sellers, suspend accounts, change the reserve policy, issue cash refunds and export audit logs.</div>
+            <div class="ids">F-ADM-01 · F-ADM-04 · F-ADM-06 · D-ADM-01 · D-ADM-05</div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qt">5. What must a seller finish before listing?</span><span class="prio now">First</span><span class="qs">Signed agreement, identity check, call recording, do-not-call/TCPA attestation.</span></summary>
+          <div class="q-body">
+            <div class="rec"><b>We suggest:</b> a signed agreement and passed verification before any listing, a confirmation call recording before a listing goes public, and a TCPA/DNC attestation renewed every 12 months.</div>
+            <div class="ids">F-SELL-READY-01/02 · F-CONSENT-02 · D-SELL-READY-01 · D-CONSENT-01</div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qt">6. How much of a seller's earnings do we hold back, and for how long?</span><span class="prio soon">Soon</span><span class="qs">The reserve policy screen exists, but payouts don't use it yet.</span></summary>
+          <div class="q-body">
+            <div class="rec"><b>We suggest:</b> new sellers (first 30 days) 10% held 14 days, sellers with more than 5% disputes 20% held 30 days, established sellers 0%. Super admins can move a seller to a stricter tier for up to 90 days, with a reason.</div>
+            <div class="ids">F-OPS-01 · F-ADM-03 · D-OPS-01 · D-ADM-02</div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qt">7. How do we catch the same lead listed twice?</span><span class="prio soon">Soon</span><span class="qs">Today a repeated lead from a CRM creates two appointments.</span></summary>
+          <div class="q-body">
+            <div class="rec"><b>We suggest:</b> same homeowner phone and same address within 30 days means "possible duplicate". It is held as a draft for the seller to confirm, not published automatically.</div>
+            <div class="ids">F-RISK-01 · D-RISK-01</div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qt">8. Which time zone is an appointment in?</span><span class="prio soon">Soon</span><span class="qs">Times now show exactly, but in the viewer's time zone. Payout release uses UTC.</span></summary>
+          <div class="q-body">
+            <div class="rec"><b>We suggest:</b> use the time zone of the appointment's ZIP code, show it on every screen and email ("Tue, Oct 6, 11:40 AM CT"), and release seller funds at end of day in that time zone.</div>
+            <div class="ids">F-TIME-01/02 · D-TIME-01/02</div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qt">9. Who earns a "Top rated" badge?</span><span class="prio soon">Soon</span><span class="qs">The landing page shows "Top Seller" at a 4.5 rating, which you haven't approved.</span></summary>
+          <div class="q-body">
+            <div class="rec"><b>We suggest:</b> an average of 4.5 or higher, from at least 5 ratings in the last 90 days, with no lost disputes in the last 30 days. Recalculated daily.</div>
+            <div class="ids">F-MKT-01 · F-TRUST-02 · D-MKT-01 · D-TRUST-01</div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qt">10. Tax documents and payouts</span><span class="prio soon">Before launch</span><span class="qs">Is a W-9 required before payouts? Who issues 1099s and monthly statements?</span></summary>
+          <div class="q-body">
+            <div class="rec"><b>We suggest:</b> let Stripe Connect collect tax details during payout onboarding and issue the 1099 forms, and block payouts until Stripe marks the account complete. Monthly statements come from the ledger as a download on the Earnings page.</div>
+            <div class="ids">F-FIN-COMP-01/02 · D-FIN-COMP-01/02</div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qt">11. Legal texts, privacy and account deletion</span><span class="prio soon">Before launch</span><span class="qs">Launch states, Privacy Policy, Terms, cookie consent, deleting data on request.</span></summary>
+          <div class="q-body">
+            <p>These need your legal counsel. We build the screens and record exactly which version each user accepted.</p>
+            <div class="rec"><b>We need:</b> the launch states, final Terms, Privacy Policy and Refund Policy, and your retention rule for closed accounts (we suggest 7 years for financial records and 90 days for everything else).</div>
+            <div class="ids">F-COM-01 · F-DATA-01 · F-POLICY-01/02 · D-COM-01 · D-DATA-01 · D-POLICY-01/02</div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qt">12. Notifications and support</span><span class="prio later">Later</span><span class="qs">Which messages are mandatory, who writes the email copy, where support requests go.</span></summary>
+          <div class="q-body">
+            <div class="rec"><b>We suggest:</b> purchase, dispute and payout messages are always sent by email, new-lead alerts follow each user's settings, and your team owns email copy with our review. Support is a shared inbox at support@homigos.com for launch, with a helpdesk tool later.</div>
+            <div class="ids">F-NTF-01 · F-ADM-04 · F-PII-03 · F-SUP-01 · D-NTF-01 · D-ADM-04 · D-PII-03 · D-SUP-01</div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qt">13. CRM integrations and listing reports</span><span class="prio later">Later</span><span class="qs">Which CRMs first, prices in dollars or cents, how buyers report a bad listing.</span></summary>
+          <div class="q-body">
+            <div class="rec"><b>We suggest:</b> start with your two most-used CRMs and ask for a sample export from each. Prices are in dollars unless the source says otherwise. Buyers can report a listing with a reason, and it goes into the admin moderation queue.</div>
+            <div class="ids">F-ING-01/02 · F-MOD-01 · F-MKT-04 · D-ING-01/02 · D-MOD-01 · D-MKT-03</div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><span class="qt">14. Security and data-retention rules</span><span class="prio later">Later</span><span class="qs">API key expiry, service-to-service credentials, how long raw CRM data and documents are kept.</span></summary>
+          <div class="q-body">
+            <div class="rec"><b>We suggest:</b> seller API keys expire after 12 months with a reminder, raw CRM data is deleted after 90 days, document download links expire after 5 minutes, and audit logs are kept for 2 years.</div>
+            <div class="ids">F-SEC-02/03 · F-OPS-02 · F-PII-02/04 · D-SEC-01/02/03 · D-OPS-02 · D-PII-01/02 · D-ADM-05</div>
+          </div>
+        </details>
+
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title"><h3>C. Design sign-off</h3><span class="count">23 screens compared with the approved prototype</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:30%">Finding</th><th>Screens</th><th style="width:22%">What we need</th></tr></thead>
+          <tbody>
+            <tr><td><b>Matches the prototype</b><span class="small">4 screens</span></td><td>Login, register, buyer disputes, listing detail</td><td>Nothing</td></tr>
+            <tr><td><b>Deliberate improvements</b><span class="small">15 screens</span></td><td>Landing page, sign-up wizards, dashboards with period tabs, earnings split into Balance / Performance / History, settings tabs, and the public marketplace preview</td><td>Approve as the new design</td></tr>
+            <tr><td><b>In the prototype, not in the app</b><span class="small">5 items</span></td><td>"Pending approval" screen, separate "Purchase success" screen, per-seller reserve overrides, bank last-4 on withdrawals, approved/rejected history tabs for admins</td><td>Tell us which to build</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= NEXT ================= -->
+  <section id="next">
+    <div class="section-head">
+      <div class="eyebrow">Next steps</div>
+      <h2>From your answers to launch</h2>
+    </div>
+    <ol class="steps">
+      <li><div><b>You review this report</b><span>Approve our suggested defaults or change any of them, and send the four accounts.</span></div></li>
+      <li><div><b>Decisions 1–5 built first</b><span>Dispute window, sale cutoff, refunds, admin roles and seller readiness. These block the most launch-critical items.</span></div></li>
+      <li><div><b>Real Stripe, email and SMS tests</b><span>Full payment, refund, chargeback and payout runs in Stripe test mode, and real emails and texts.</span></div></li>
+      <li><div><b>Remaining decisions and design sign-off</b><span>Reserve holdback, duplicates, time zones, badges, tax, legal texts, plus the 5 missing design items you choose.</span></div></li>
+      <li><div><b>Launch readiness check</b><span>Manual accessibility pass, move files to S3, final security review, then go-live.</span></div></li>
+    </ol>
+  </section>
+
+  <footer>
+    <span>Prepared by the Homigos engineering team · 24 September 2026</span>
+    <span>Based on the structured marketplace audit and our response to it. All numbers come from the current code and live data, not estimates.</span>
+  </footer>
+</div>
+</body>
+</html>
