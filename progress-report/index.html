@@ -205,7 +205,7 @@
       <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="26" height="23" rx="6" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M10 3v6M22 3v6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="23.5" cy="23.5" r="6" fill="#1f5fd1"/><path d="M20.8 23.6l1.9 1.9 3.5-3.6" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span>homi<span class="gos">gos</span></span>
     </div>
-    <div class="eyebrow">Progress report · 24 September 2026</div>
+    <div class="eyebrow">Progress report · 27 September 2026</div>
     <h1>Where Homigos stands after the marketplace audit</h1>
     <p class="lede">
       We received the structured marketplace audit (60 findings) on 23 September. This report
@@ -214,7 +214,7 @@
     </p>
     <div class="meta-row">
       <span class="pill live">Live at homigos.com</span>
-      <span>All changes below are deployed to production</span>
+      <span>All changes below are deployed to production · updated 27 Sep with storage, backups and deploy safety</span>
     </div>
     <nav class="toc" aria-label="Sections">
       <a href="#status">Status at a glance</a>
@@ -235,18 +235,18 @@
     </div>
     <div class="tiles">
       <div class="tile ok"><div class="n">17</div><div class="lbl">Done</div><div class="sub">Built, tested and deployed</div></div>
-      <div class="tile part"><div class="n">9</div><div class="lbl">Partly done</div><div class="sub">Safe part shipped; the rest needs a decision</div></div>
+      <div class="tile part"><div class="n">11</div><div class="lbl">Partly done</div><div class="sub">Safe part shipped; the rest needs a decision</div></div>
       <div class="tile wait"><div class="n">30</div><div class="lbl">Need your decision</div><div class="sub">Business or legal rules we can't guess</div></div>
-      <div class="tile infra"><div class="n">4</div><div class="lbl">Need accounts or keys</div><div class="sub">Stripe, email/SMS, file storage</div></div>
+      <div class="tile infra"><div class="n">2</div><div class="lbl">Need accounts or keys</div><div class="sub">Stripe, email/SMS</div></div>
     </div>
-    <div class="bar" role="img" aria-label="60 findings: 17 done, 9 partly done, 30 need a decision, 4 need accounts">
-      <span class="ok" style="width:28.33%"></span><span class="part" style="width:15%"></span><span class="wait" style="width:50%"></span><span class="infra" style="width:6.67%"></span>
+    <div class="bar" role="img" aria-label="60 findings: 17 done, 11 partly done, 30 need a decision, 2 need accounts">
+      <span class="ok" style="width:28.33%"></span><span class="part" style="width:18.33%"></span><span class="wait" style="width:50%"></span><span class="infra" style="width:3.33%"></span>
     </div>
     <div class="legend">
       <span><i style="background:var(--ok)"></i>Done 17</span>
-      <span><i style="background:var(--part)"></i>Partly done 9</span>
+      <span><i style="background:var(--part)"></i>Partly done 11</span>
       <span><i style="background:var(--wait)"></i>Your decision 30</span>
-      <span><i style="background:var(--infra)"></i>Accounts / keys 4</span>
+      <span><i style="background:var(--infra)"></i>Accounts / keys 2</span>
     </div>
     <div class="callout alert">
       <strong>Critical issue found and fixed during this work</strong>
@@ -307,13 +307,13 @@
             <text x="810" y="28" class="svg-muted" font-size="11" font-weight="600" letter-spacing="1.2">OUTSIDE SERVICES</text>
             <rect x="810" y="112" width="160" height="56" rx="10" class="svg-partt"/><text x="824" y="136" class="svg-ink" font-weight="600">Stripe</text><text x="824" y="156" class="svg-part" font-size="11.5" font-weight="600">wired · needs test account</text>
             <rect x="810" y="252" width="160" height="56" rx="10" class="svg-infrat"/><text x="824" y="276" class="svg-ink" font-weight="600">Email and SMS</text><text x="824" y="296" class="svg-infra" font-size="11.5" font-weight="600">stand-in · needs provider</text>
-            <rect x="810" y="362" width="160" height="56" rx="10" class="svg-infrat"/><text x="824" y="386" class="svg-ink" font-weight="600">File storage (S3)</text><text x="824" y="406" class="svg-infra" font-size="11.5" font-weight="600">local disk · needs AWS</text>
+            <rect x="810" y="362" width="160" height="56" rx="10" class="svg-okt"/><text x="824" y="386" class="svg-ink" font-weight="600">File storage (S3)</text><text x="824" y="406" class="svg-ok" font-size="11.5" font-weight="600">live · encrypted · backed up</text>
 
             <!-- event bus + db -->
             <rect x="410" y="330" width="352" height="40" rx="10" class="svg-sunk"/><text x="586" y="355" text-anchor="middle" class="svg-ink" font-size="12.5" font-weight="600">Event bus (RabbitMQ) · now includes payment events</text>
             <rect x="410" y="382" width="352" height="40" rx="10" class="svg-sunk"/><text x="586" y="407" text-anchor="middle" class="svg-ink" font-size="12.5" font-weight="600">MongoDB · homeowner data encrypted per field</text>
 
-            <text x="20" y="455" class="svg-muted" font-size="12">One AWS EC2 server, Docker Compose, redeploys automatically on every merge. HTTPS by Let's Encrypt.</text>
+            <text x="20" y="455" class="svg-muted" font-size="12">One AWS EC2 server, Docker Compose, health-checked deploys with automatic rollback. Daily backups. HTTPS by Let's Encrypt.</text>
           </g>
         </svg>
       </div>
@@ -325,8 +325,39 @@
   <section id="delivered">
     <div class="section-head">
       <div class="eyebrow">What we delivered</div>
-      <h2>What changed since the audit, in four groups</h2>
+      <h2>What changed since the audit, in five groups</h2>
       <p class="muted">Each item says what was wrong before and what happens now. Every change has automated tests and is deployed.</p>
+    </div>
+
+    <div class="group">
+      <div class="group-title"><h3>Ready for your testing (added 27 Sep)</h3><span class="count">5 items</span></div>
+      <div class="cards">
+        <div class="card">
+          <h3>Uploaded files are in secure cloud storage</h3>
+          <dl class="ba"><dt>Before</dt><dd>Licenses, insurance papers, W-9s, call recordings and dispute evidence sat on the server's own disk.</dd><dt>Now</dt><dd>They go to a private, encrypted Amazon S3 bucket. The server has no stored passwords for it. Older files still open normally.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span><span class="tag">Managed key (KMS) next</span></div>
+        </div>
+        <div class="card">
+          <h3>Call recordings and photos survive updates</h3>
+          <dl class="ba"><dt>Before</dt><dd>Recordings and job photos were kept in a temporary folder that was wiped every time we deployed an update.</dd><dt>Now</dt><dd>They are stored permanently, in S3.</dd></dl>
+          <div class="tags"><span class="tag crit">Bug fixed</span><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>Daily backups</h3>
+          <dl class="ba"><dt>Before</dt><dd>No backups of the database or the server.</dd><dt>Now</dt><dd>A full server snapshot every day (last 7 kept) and a nightly database copy in S3 (last 30 days). The first copy passed a trial restore.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>Safer updates</h3>
+          <dl class="ba"><dt>Before</dt><dd>A broken update stayed live until someone noticed.</dd><dt>Now</dt><dd>After each update all 8 services are checked. If any fails, the previous version is restored automatically, then the site is checked again from outside.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+        <div class="card">
+          <h3>Problems caught before they merge</h3>
+          <dl class="ba"><dt>Before</dt><dd>Web app and server-config changes were only checked after merging, when they could block an update.</dd><dt>Now</dt><dd>Every proposed change to the web app or server config is checked first. Server disk use cut from 80% to 41% and kept low.</dd></dl>
+          <div class="tags"><span class="tag ok">Done</span></div>
+        </div>
+      </div>
     </div>
 
     <div class="group">
@@ -489,7 +520,7 @@
     </div>
 
     <div class="group">
-      <div class="group-title"><h3>A. Accounts and keys</h3><span class="count">4 items · unblocks real payments, emails and file storage</span></div>
+      <div class="group-title"><h3>A. Accounts and keys</h3><span class="count">3 items · unblocks real payments, emails and texts</span></div>
       <div class="table-wrap">
         <table>
           <thead><tr><th style="width:24%">What</th><th>What exactly we need</th><th style="width:26%">What it unlocks</th><th style="width:10%">Priority</th></tr></thead>
@@ -502,7 +533,7 @@
             </tr>
             <tr>
               <td><b>Email sending</b></td>
-              <td>Your choice of SendGrid or Amazon SES. An API key, plus DNS access (or your IT contact) to verify <span class="mono">homigos.com</span> as the sender (SPF, DKIM, DMARC).</td>
+              <td>We suggest Amazon SES in the AWS account we already use (SendGrid also works). We need DNS access in GoDaddy (or your IT contact) to add the records that verify <span class="mono">homigos.com</span> as the sender (SPF, DKIM, DMARC). We then ask AWS to lift the sending limits, which usually takes about a day.</td>
               <td>Welcome, purchase confirmation, lead delivery, dispute and payout emails actually get sent.</td>
               <td><span class="prio now">First</span></td>
             </tr>
@@ -511,12 +542,6 @@
               <td>A Twilio account (SID, auth token, sending number) with US A2P 10DLC registration for Homigos.</td>
               <td>Homeowner phone verification codes and optional SMS alerts.</td>
               <td><span class="prio soon">Soon</span></td>
-            </tr>
-            <tr>
-              <td><b>Secure file storage</b></td>
-              <td>Permission in the AWS account to create an encrypted S3 bucket and a KMS key (we set them up), or an existing bucket and key.</td>
-              <td>License, insurance and W-9 documents plus call recordings move off the server disk. Also a managed key for homeowner-data encryption.</td>
-              <td><span class="prio soon">Before launch</span></td>
             </tr>
           </tbody>
         </table>
@@ -667,16 +692,16 @@
       <h2>From your answers to launch</h2>
     </div>
     <ol class="steps">
-      <li><div><b>You review this report</b><span>Approve our suggested defaults or change any of them, and send the four accounts.</span></div></li>
+      <li><div><b>You review this report</b><span>Approve our suggested defaults or change any of them, and send the Stripe, email and SMS accounts.</span></div></li>
       <li><div><b>Decisions 1–5 built first</b><span>Dispute window, sale cutoff, refunds, admin roles and seller readiness. These block the most launch-critical items.</span></div></li>
       <li><div><b>Real Stripe, email and SMS tests</b><span>Full payment, refund, chargeback and payout runs in Stripe test mode, and real emails and texts.</span></div></li>
       <li><div><b>Remaining decisions and design sign-off</b><span>Reserve holdback, duplicates, time zones, badges, tax, legal texts, plus the 5 missing design items you choose.</span></div></li>
-      <li><div><b>Launch readiness check</b><span>Manual accessibility pass, move files to S3, final security review, then go-live.</span></div></li>
+      <li><div><b>Launch readiness check</b><span>Manual accessibility pass, managed encryption key (KMS) for files and homeowner data, final security review, then go-live.</span></div></li>
     </ol>
   </section>
 
   <footer>
-    <span>Prepared by the Homigos engineering team · 24 September 2026</span>
+    <span>Prepared by the Homigos engineering team · 24 September 2026 · updated 27 September 2026</span>
     <span>Based on the structured marketplace audit and our response to it. All numbers come from the current code and live data, not estimates.</span>
   </footer>
 </div>
